@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +24,12 @@ namespace TaskTracker
         public MainWindow()
         {
             InitializeComponent();
+            TaskItems.Add(new TaskItem { IsCompleted = false, TaskId = "TASK1234", Description = "Something" });
         }
 
-        private void addButton_Click(object sender, RoutedEventArgs e)
+        public ObservableCollection<TaskItem> TaskItems { get; set; } = new();
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
         {
 
         }

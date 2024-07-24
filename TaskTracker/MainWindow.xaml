@@ -13,12 +13,27 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Button x:Name="addButton" Content="Add" Click="addButton_Click"/>
+            <Button x:Name="addButton" Content="Add" Click="AddButton_Click"/>
         </StackPanel>
-        <ListView x:Name="listBox" Grid.Row="1">
+        <ListView x:Name="listBox" Grid.Row="1" ItemsSource="{Binding TaskItems}">
+            <ListView.View>
+                <GridView>
+                    <GridView.Columns>
+                        <GridViewColumn Header="">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsCompleted}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Task ID" DisplayMemberBinding="{Binding TaskId}" />
+                        <GridViewColumn Header="Desc" DisplayMemberBinding="{Binding Description}" />
+                        <GridViewColumn Header="Due" DisplayMemberBinding="{Binding DueDateDisplay}" />
+                    </GridView.Columns>
+                    
+                </GridView>
+            </ListView.View>
             
-            <ListViewItem Content="Item 1" />
-            <ListViewItem Content="Item 2" />
         </ListView>
 
     </Grid>
