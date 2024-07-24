@@ -12,10 +12,10 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" >
             <Button x:Name="addButton" Content="Add" Click="AddButton_Click"/>
         </StackPanel>
-        <ListView x:Name="listBox" Grid.Row="1" ItemsSource="{Binding TaskItems}">
+        <ListView x:Name="listBox" Grid.Row="1" ItemsSource="{Binding TaskItems}" SelectionMode="Single">
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
@@ -30,10 +30,10 @@
                         <GridViewColumn Header="Desc" DisplayMemberBinding="{Binding Description}" />
                         <GridViewColumn Header="Due" DisplayMemberBinding="{Binding DueDateDisplay}" />
                     </GridView.Columns>
-                    
+
                 </GridView>
             </ListView.View>
-            
+
         </ListView>
 
     </Grid>
