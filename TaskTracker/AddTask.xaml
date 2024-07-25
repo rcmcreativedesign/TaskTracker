@@ -11,11 +11,22 @@
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Task ID" />
-                <TextBox Text="{Binding TaskItem.TaskId}" />
+                <TextBox Text="{Binding TaskItem.TaskId}" MinWidth="150" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Description" />
-                <TextBox Text="{Binding TaskItem.Description}" />
+                <TextBox Text="{Binding TaskItem.Description}" MinWidth="150" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Category" />
+                <TextBox Text="{Binding TaskItem.Category}" MinWidth="150" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Due Date" />
+                <TextBox Text="{Binding TaskItem.DueDate}" MinWidth="150" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Add" Click="AddButton_Click" />
             </StackPanel>
         </StackPanel>
     </Grid>

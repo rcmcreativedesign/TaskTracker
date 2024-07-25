@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using TaskTracker.Helpers;
 
 namespace TaskTracker
 {
@@ -11,7 +12,12 @@ namespace TaskTracker
         public MainWindow()
         {
             InitializeComponent();
-            foreach (TaskItem item in GenerateTestData().Where(x => !x.IsCompleted))
+            //foreach (TaskItem item in GenerateTestData().Where(x => !x.IsCompleted))
+            //{
+            //    item.TaskCompleted += TaskCompletedHandler;
+            //    TaskItems.Add(item);
+            //}
+            foreach (TaskItem item in DataProcessor.GetAllTaskItems())
             {
                 item.TaskCompleted += TaskCompletedHandler;
                 TaskItems.Add(item);

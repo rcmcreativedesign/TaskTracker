@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using TaskTracker.Helpers;
 
 namespace TaskTracker
 {
@@ -9,6 +10,17 @@ namespace TaskTracker
             InitializeComponent();
         }
 
-        public TaskItem TaskItem { get; set; }
+        public TaskItem TaskItem { get; set; } = new();
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(TaskItem.TaskId) ||
+                string.IsNullOrEmpty(TaskItem.Description)) 
+            { 
+                return;
+            }
+
+            DataProcessor.SaveTaskItem(TaskItem);
+        }
     }
 }
