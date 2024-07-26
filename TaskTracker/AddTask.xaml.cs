@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using TaskTracker.Helpers;
 
 namespace TaskTracker
@@ -9,6 +10,8 @@ namespace TaskTracker
         {
             InitializeComponent();
         }
+
+        public event EventHandler<TaskItem> WindowClosed;
 
         public TaskItem TaskItem { get; set; } = new();
 
@@ -21,6 +24,8 @@ namespace TaskTracker
             }
 
             DataProcessor.SaveTaskItem(TaskItem);
+            WindowClosed?.Invoke(this, TaskItem);
+            Close();
         }
     }
 }

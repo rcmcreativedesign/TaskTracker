@@ -27,7 +27,7 @@ namespace TaskTracker.Helpers
         {
             var dataFile = JsonSerializer.Serialize(taskItems);
             if (!File.Exists(filePath))
-                File.Create(filePath).Close();
+                File.CreateText(filePath).Close();
             File.WriteAllText(filePath, dataFile);
         }
 

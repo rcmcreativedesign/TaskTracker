@@ -28,8 +28,15 @@ namespace TaskTracker
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            AddTask task = new AddTask();
+            AddTask task = new();
+            task.WindowClosed += AddTask_WindowClosed;
             task.Show();
+        }
+
+        private void AddTask_WindowClosed(object sender, TaskItem addedItem)
+        {
+            addedItem.TaskCompleted += TaskCompletedHandler;
+            TaskItems.Add(addedItem);
         }
 
         private static List<TaskItem> GenerateTestData()
