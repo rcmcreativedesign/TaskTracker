@@ -6,28 +6,37 @@
         xmlns:local="clr-namespace:TaskTracker"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
-        Title="Add Item" Height="450" Width="450">
-    <Grid>
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Task ID" />
-                <TextBox Text="{Binding TaskItem.TaskId}" MinWidth="150" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Description" />
-                <TextBox Text="{Binding TaskItem.Description}" MinWidth="150" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Category" />
-                <TextBox Text="{Binding TaskItem.Category}" MinWidth="150" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Due Date" />
-                <TextBox Text="{Binding TaskItem.DueDate}" MinWidth="150" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Add" Click="AddButton_Click" />
-            </StackPanel>
+        Title="Add Item" Height="220" Width="300"
+        WindowStartupLocation="CenterScreen"
+        >
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <!--<RowDefinition Height="Auto" />-->
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="2">
+            <TextBlock Text="Task ID" MinWidth="75" />
+            <TextBox Text="{Binding TaskItem.TaskId}" MinWidth="150" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="2">
+            <TextBlock Text="Description" MinWidth="75" />
+            <TextBox Text="{Binding TaskItem.Description}" MinWidth="150" MinHeight="50" AcceptsReturn="True" TextWrapping="Wrap" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="2">
+            <TextBlock Text="Category" MinWidth="75" />
+            <TextBox Text="{Binding TaskItem.Category}" MinWidth="150" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="2">
+            <TextBlock Text="Due Date" MinWidth="75" />
+            <TextBox Text="{Binding TaskItem.DueDate}" MinWidth="150" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Margin="2">
+            <Button Content="Add" Click="AddButton_Click" MinWidth="50" MaxHeight="30" IsDefault="True" />
+            <Button Content="Cancel" Click="CancelButton_Click" MinWidth="50" MaxHeight="30" IsCancel="True" Margin="5,0,0,0" />
         </StackPanel>
     </Grid>
 </Window>

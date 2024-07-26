@@ -18,13 +18,18 @@ namespace TaskTracker
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(TaskItem.TaskId) ||
-                string.IsNullOrEmpty(TaskItem.Description)) 
-            { 
+                string.IsNullOrEmpty(TaskItem.Description))
+            {
                 return;
             }
 
             DataProcessor.SaveTaskItem(TaskItem);
             WindowClosed?.Invoke(this, TaskItem);
+            Close();
+        }
+
+        private void CancelButton_Click(object obj, RoutedEventArgs e)
+        {
             Close();
         }
     }

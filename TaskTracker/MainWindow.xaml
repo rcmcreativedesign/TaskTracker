@@ -12,8 +12,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" >
-            <Button x:Name="addButton" Content="Add" Click="AddButton_Click"/>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="2" >
+            <Button x:Name="addButton" Content="Add" Click="AddButton_Click" Height="30" MinWidth="50" IsDefault="True"/>
         </StackPanel>
         <ListView x:Name="listBox" Grid.Row="1" ItemsSource="{Binding TaskItems}" SelectionMode="Single">
             <ListView.View>

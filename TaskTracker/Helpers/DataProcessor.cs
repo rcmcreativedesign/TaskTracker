@@ -12,6 +12,8 @@ namespace TaskTracker.Helpers
             if (!File.Exists(filePath))
                 return [];
             var dataFile = File.ReadAllText(filePath);
+            if (string.IsNullOrEmpty(dataFile))
+                return [];
             var taskItems = JsonSerializer.Deserialize<List<TaskItem>>(dataFile);
             return taskItems ?? [];
         }
