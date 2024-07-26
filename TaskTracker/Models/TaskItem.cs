@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
+using TaskTracker.Enums;
 
-namespace TaskTracker
+namespace TaskTracker.Models
 {
     public class TaskItem : INotifyPropertyChanged
     {
@@ -22,11 +25,15 @@ namespace TaskTracker
                 }
             }
         }
+        [Required]
         public string TaskId { get; set; }
+        public ServiceNowType ServiceNowType { get; set; }
+        [Required]
         public string Description { get; set; }
-        public string Category { get; set; }
+        public Category Category { get; set; }
         public DateTime? DueDate { get; set; }
 
+        [JsonIgnore]
         public string DueDateDisplay => DueDate?.ToString("MM/dd/yyyy", new CultureInfo("en-US")) ?? string.Empty;
 
         public event PropertyChangedEventHandler PropertyChanged;

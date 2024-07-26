@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using TaskTracker.Helpers;
+using TaskTracker.Models;
 
 namespace TaskTracker
 {

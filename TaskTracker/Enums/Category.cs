@@ -1,6 +1,6 @@
 ﻿namespace TaskTracker.Enums
 {
-    public enum Categories
+    public enum Category
     {
         TeamLead,
         DevOps,
