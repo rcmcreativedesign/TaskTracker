@@ -44,7 +44,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="2">
             <TextBlock Text="Description" MinWidth="75" />
-            <TextBox Width="150" MinHeight="50" AcceptsReturn="True" TextWrapping="Wrap">
+            <TextBox Width="150" Height="60" AcceptsReturn="True" TextWrapping="Wrap">
                 <TextBox.Text>
                     <Binding Path="TaskItem.Description"
                              Mode="TwoWay"
@@ -82,7 +82,7 @@
 
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="5" Margin="2">
-            <Button Content="Add" Click="AddButton_Click" MinWidth="50" MaxHeight="30" IsDefault="True" />
+            <Button Content="Add" Click="AddButton_Click" IsEnabled="{Binding TaskItem.IsValid, Mode=OneWay}" MinWidth="50" MaxHeight="30" IsDefault="True" />
             <Button Content="Cancel" Click="CancelButton_Click" MinWidth="50" MaxHeight="30" IsCancel="True" Margin="5,0,0,0" />
         </StackPanel>
     </Grid>

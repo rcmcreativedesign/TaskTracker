@@ -54,7 +54,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Due" DisplayMemberBinding="{Binding DueDateDisplay}" />
+                        <GridViewColumn Header="Due" Width="120" DisplayMemberBinding="{Binding DueDateDisplay}" />
                     </GridView.Columns>
 
                 </GridView>

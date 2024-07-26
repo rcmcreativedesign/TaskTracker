@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
@@ -12,6 +11,8 @@ namespace TaskTracker.Models
     public class TaskItem : INotifyPropertyChanged
     {
         private bool isCompleted;
+        private string taskId;
+        private string description;
 
         public bool IsCompleted
         {
@@ -25,14 +26,14 @@ namespace TaskTracker.Models
                 }
             }
         }
-        [Required]
-        public string TaskId { get; set; }
+        public string TaskId { get => taskId; set { _ = SetProperty(ref taskId, value); RaisePropertyChanged(nameof(IsValid)); } }
         public ServiceNowType ServiceNowType { get; set; }
-        [Required]
-        public string Description { get; set; }
+        public bool IsServiceNow => ServiceNowType != ServiceNowType.None;
+        public string Description { get => description; set { _ = SetProperty(ref description, value); RaisePropertyChanged(nameof(IsValid)); } }
         public Category Category { get; set; }
         public DateTime? DueDate { get; set; }
-
+        [JsonIgnore]
+        public bool IsValid { get => !string.IsNullOrEmpty(TaskId) && !string.IsNullOrEmpty(Description); }
         [JsonIgnore]
         public string DueDateDisplay => DueDate?.ToString("MM/dd/yyyy", new CultureInfo("en-US")) ?? string.Empty;
 

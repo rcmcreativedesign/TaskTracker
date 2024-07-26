@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -30,7 +29,7 @@ namespace TaskTracker
         }
 
         public ICommand TaskIdClickedCommand { get; set; }
-        public ObservableCollection<TaskItem> TaskItems { get; set; } = new();
+        public ObservableCollection<TaskItem> TaskItems { get; set; } = [];
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
@@ -39,7 +38,7 @@ namespace TaskTracker
             task.Show();
         }
 
-        public void TaskId_Clicked(object taskId)
+        private void TaskId_Clicked(object taskId)
         {
             if (taskId is string id)
             {
@@ -48,12 +47,12 @@ namespace TaskTracker
                 {
                     var type = taskItem.ServiceNowType switch
                     {
-                        ServiceNowType.Incident => "sc_incident",
-                        ServiceNowType.Request => "sc_request",
-                        _ => "sc_task"
+                        ServiceNowType.Incident => "incident",
+                        ServiceNowType.Request => "request",
+                        _ => "task"
                     };
-                    var url = $"{SERVICENOWURL}/{type}?sysparm_query=number={taskItem.TaskId}";
-                    //Process.Start($"{SERVICENOWURL}/{type}?sys_parm=number={taskItem.TaskId}");
+                    var url = $"{SERVICENOWURL}/sc_{type}.do?sysparm_query=number={taskItem.TaskId}";
+                    Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true});
                 }
             }
         }
@@ -64,18 +63,6 @@ namespace TaskTracker
             TaskItems.Add(addedItem);
         }
 
-        private static List<TaskItem> GenerateTestData()
-        {
-            List<TaskItem> testData = new()
-            {
-                new TaskItem { IsCompleted = false, TaskId = "PRJ001", Description = "First project", Category = Category.TeamLead, DueDate = DateTime.Now.AddDays(2) },
-                new TaskItem { IsCompleted = false, TaskId = "TASK10933", Description = "Fix the issue with the program that people use", Category = Category.DotNet },
-                new TaskItem { IsCompleted = true, TaskId = "PRJ002", Description = "Second Project", Category = Category.VPMS, DueDate = DateTime.Now.AddDays(-2) }
-            };
-
-            return testData;
-        }
-
         private void TaskCompletedHandler(object sender, EventArgs args)
         {
             if (sender is TaskItem task)
@@ -84,5 +71,17 @@ namespace TaskTracker
                 _ = TaskItems.Remove(task);
             }
         }
+
+        //private static List<TaskItem> GenerateTestData()
+        //{
+        //    List<TaskItem> testData =
+        //    [
+        //        new TaskItem { IsCompleted = false, TaskId = "PRJ001", Description = "First project", Category = Category.TeamLead, DueDate = DateTime.Now.AddDays(2) },
+        //        new TaskItem { IsCompleted = false, TaskId = "TASK10933", Description = "Fix the issue with the program that people use", Category = Category.DotNet },
+        //        new TaskItem { IsCompleted = true, TaskId = "PRJ002", Description = "Second Project", Category = Category.VPMS, DueDate = DateTime.Now.AddDays(-2) }
+        //    ];
+
+        //    return testData;
+        //}
     }
 }
