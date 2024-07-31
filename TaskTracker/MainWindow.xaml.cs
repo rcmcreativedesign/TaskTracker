@@ -50,11 +50,13 @@ namespace TaskTracker
                 {
                     var type = taskItem.ServiceNowType switch
                     {
-                        ServiceNowType.Incident => "incident",
-                        ServiceNowType.Request => "request",
-                        _ => "task"
+                        ServiceNowType.Incident => "sc_incident",
+                        ServiceNowType.Request => "sc_request",
+                        ServiceNowType.C5Task => "x_ofost_c5_task_table",
+                        ServiceNowType.Change => "change_request",
+                        _ => "sc_task"
                     };
-                    var url = $"{SERVICENOWURL}/sc_{type}.do?sysparm_query=number={taskItem.TaskId}";
+                    var url = $"{SERVICENOWURL}/{type}.do?sysparm_query=number={taskItem.TaskId}";
                     Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true});
                 }
             }
@@ -88,9 +90,10 @@ namespace TaskTracker
             TaskItems.Add(addedItem);
         }
 
-        private void EditTask_WindowClosed(object sender, TaskItem e)
+        private void EditTask_WindowClosed(object sender, TaskItem updatedItem)
         {
-            TaskItems.First(x => x.TaskId == e.TaskId);
+            var taskItem = TaskItems.First(x => x.TaskId == updatedItem.TaskId);
+            taskItem.Update(updatedItem);
             listBox.Items.Refresh();
         }
 
@@ -101,6 +104,16 @@ namespace TaskTracker
                 task.TaskCompleted -= TaskCompletedHandler;
                 _ = TaskItems.Remove(task);
             }
+        }
+
+        private void TabControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var test = e.AddedItems;
+        }
+
+        private void TabItem_Selected(object sender, RoutedEventArgs e)
+        {
+            var test = e.RoutedEvent;
         }
 
         //private static List<TaskItem> GenerateTestData()

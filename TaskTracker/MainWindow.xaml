@@ -15,6 +15,13 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="2" >
             <Button x:Name="addButton" Content="Add" Click="AddButton_Click" Height="30" MinWidth="50" IsDefault="True"/>
+            <TabControl TabStripPlacement="Top" Margin="10,0,0,0">
+                <TabItem Header="All" IsSelected="True" Selector.Selected="TabItem_Selected" />
+                <TabItem Header="Team Lead" />
+                <TabItem Header="Dev Ops" />
+                <TabItem Header="Dot NET" />
+                <TabItem Header="VPMS" />
+            </TabControl>
         </StackPanel>
         <ListView x:Name="listBox" Grid.Row="1" ItemsSource="{Binding TaskItems}" SelectionMode="Single">
             <ListView.View>
@@ -54,11 +61,34 @@
                                         <TextBlock.InputBindings>
                                             <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ElementName=listBox, Path=DataContext.EditTaskCommand}" CommandParameter="{Binding TaskId}" />
                                         </TextBlock.InputBindings>
+                                        <TextBlock.ToolTip>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock>
+                                                    <Run Text="Requested By: " />
+                                                    <Run Text="{Binding Requestor}" />
+                                                </TextBlock>
+                                                <TextBlock>
+                                                    <Run Text="Assigned To: " />
+                                                    <Run Text="{Binding AssignedTo}" />
+                                                </TextBlock>
+                                                <TextBlock>
+                                                    <Run Text="Last Checked: " />
+                                                    <Run Text="{Binding LastChecked}" />
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </TextBlock.ToolTip>
                                     </TextBlock>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Due" Width="120" DisplayMemberBinding="{Binding DueDateDisplay}" />
+                        <GridViewColumn Header="Due" Width="120">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DueDateDisplay}" TextWrapping="Wrap">
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                     </GridView.Columns>
 
                 </GridView>
