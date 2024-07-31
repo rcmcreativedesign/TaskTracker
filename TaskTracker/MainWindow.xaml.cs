@@ -20,6 +20,7 @@ namespace TaskTracker
             InitializeComponent();
 
             TaskIdClickedCommand = new SimpleDelegateCommand(TaskId_Clicked);
+            EditTaskCommand = new SimpleDelegateCommand(EditTask_Clicked);
 
             foreach (TaskItem item in DataProcessor.GetAllTaskItems())
             {
@@ -29,6 +30,8 @@ namespace TaskTracker
         }
 
         public ICommand TaskIdClickedCommand { get; set; }
+        public ICommand EditTaskCommand { get; set; }
+
         public ObservableCollection<TaskItem> TaskItems { get; set; } = [];
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -57,10 +60,38 @@ namespace TaskTracker
             }
         }
 
+        private void EditTask_Clicked(object taskId)
+        {
+            if (taskId is string id)
+            {
+                var taskItem = TaskItems.FirstOrDefault( x => x.TaskId == id);
+                if (taskItem != null)
+                {
+                    EditTask task = new();
+                    task.WindowClosed += EditTask_WindowClosed;
+                    task.Show();
+                    task.TaskItem.TaskId = taskItem.TaskId;
+                    task.TaskItem.Description = taskItem.Description;
+                    task.TaskItem.Category = taskItem.Category;
+                    task.TaskItem.DueDate = taskItem.DueDate;
+                    task.TaskItem.LastChecked = taskItem.LastChecked;
+                    task.TaskItem.ServiceNowType = taskItem.ServiceNowType;
+                    task.TaskItem.Requestor = taskItem.Requestor;
+                    task.TaskItem.AssignedTo = taskItem.AssignedTo;
+                }
+            }
+        }
+
         private void AddTask_WindowClosed(object sender, TaskItem addedItem)
         {
             addedItem.TaskCompleted += TaskCompletedHandler;
             TaskItems.Add(addedItem);
+        }
+
+        private void EditTask_WindowClosed(object sender, TaskItem e)
+        {
+            TaskItems.First(x => x.TaskId == e.TaskId);
+            listBox.Items.Refresh();
         }
 
         private void TaskCompletedHandler(object sender, EventArgs args)

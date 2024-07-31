@@ -1,25 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
-using TaskTracker.Commands;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using TaskTracker.Helpers;
 using TaskTracker.Models;
 
 namespace TaskTracker
 {
-    public partial class AddTask : Window
+    /// <summary>
+    /// Interaction logic for EditTask.xaml
+    /// </summary>
+    public partial class EditTask : Window
     {
-        public AddTask()
+        public EditTask()
         {
             InitializeComponent();
-            taskId.Focus();
         }
 
         public event EventHandler<TaskItem> WindowClosed;
 
         public TaskItem TaskItem { get; set; } = new();
 
-        private void AddButton_Click(object sender, RoutedEventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(TaskItem.TaskId) || string.IsNullOrEmpty(TaskItem.Description))
                 return;

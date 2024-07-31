@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using TaskTracker.Models;
 
@@ -22,7 +23,13 @@ namespace TaskTracker.Helpers
         public static void SaveTaskItem(TaskItem item)
         {
             var allItems = GetAllTaskItems();
-            allItems.Add(item);
+            if (allItems.Any(x => x.TaskId == item.TaskId))
+            {
+                var taskItem = allItems.First(x => x.TaskId == item.TaskId);
+                taskItem.Update(item);
+            }
+            else
+                allItems.Add(item);
             SaveAllTaskItems(allItems);
         }
 

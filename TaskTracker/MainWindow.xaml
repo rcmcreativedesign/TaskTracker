@@ -50,7 +50,11 @@
                         <GridViewColumn Header="Desc" Width="220">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap">
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ElementName=listBox, Path=DataContext.EditTaskCommand}" CommandParameter="{Binding TaskId}" />
+                                        </TextBlock.InputBindings>
+                                    </TextBlock>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
