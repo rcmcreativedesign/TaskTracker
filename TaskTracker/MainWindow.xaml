@@ -14,14 +14,11 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="2" >
-            <Button x:Name="addButton" Content="Add" Click="AddButton_Click" Height="30" MinWidth="50" IsDefault="True"/>
-            <TabControl TabStripPlacement="Top" Margin="10,0,0,0">
-                <TabItem Header="All" IsSelected="True" Selector.Selected="TabItem_Selected" />
-                <TabItem Header="Team Lead" />
-                <TabItem Header="Dev Ops" />
-                <TabItem Header="Dot NET" />
-                <TabItem Header="VPMS" />
-            </TabControl>
+            <Button x:Name="AddButton" Content="Add" Click="AddButton_Click" Height="30" MinWidth="50" IsDefault="True"/>
+            <TabControl x:Name="FilterTab" TabStripPlacement="Top" Margin="10,0,0,0" />
+            <Button x:Name="SettingsButton" Click="SettingsButton_Click" Height="30" MinWidth="50" Content="Settings" Margin="10,0,0,0">
+                
+            </Button>
         </StackPanel>
         <ListView x:Name="listBox" Grid.Row="1" ItemsSource="{Binding TaskItems}" SelectionMode="Single">
             <ListView.View>
