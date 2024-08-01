@@ -8,12 +8,16 @@ namespace TaskTracker.Helpers
 {
     public static class DataProcessor
     {
-        private const string filePath = "C:\\Temp\\TaskItems.json";
+        private const string filePathBase = "C:\\Temp";
+        private const string itemsFile = "TaskItems.json";
+        private const string settingsFile = "Settings.json";
+
         public static List<TaskItem> GetAllTaskItems()
         {
-            if (!File.Exists(filePath))
+            string itemsFilePath = Path.Combine(filePathBase, itemsFile);
+            if (!File.Exists(itemsFilePath))
                 return [];
-            var dataFile = File.ReadAllText(filePath);
+            var dataFile = File.ReadAllText(itemsFilePath);
             if (string.IsNullOrEmpty(dataFile))
                 return [];
             var taskItems = JsonSerializer.Deserialize<List<TaskItem>>(dataFile);
@@ -35,11 +39,32 @@ namespace TaskTracker.Helpers
 
         public static void SaveAllTaskItems(List<TaskItem> taskItems)
         {
+            string itemsFilePath = Path.Combine(filePathBase, itemsFile);
             var dataFile = JsonSerializer.Serialize(taskItems);
-            if (!File.Exists(filePath))
-                File.CreateText(filePath).Close();
-            File.WriteAllText(filePath, dataFile);
+            if (!File.Exists(itemsFilePath))
+                File.CreateText(itemsFilePath).Close();
+            File.WriteAllText(itemsFilePath, dataFile);
         }
 
+        public static Settings GetSettings()
+        {
+            string setingsFilePath = Path.Combine(filePathBase, settingsFile);
+            if (!File.Exists(setingsFilePath))
+                return new();
+            var dataFile = File.ReadAllText(setingsFilePath);
+            if (string.IsNullOrEmpty(dataFile))
+                return new();
+            var settings = JsonSerializer.Deserialize<Settings>(dataFile);
+            return settings ?? new();
+        }
+
+        public static void SaveSettings(Settings settings)
+        {
+            string setingsFilePath = Path.Combine(filePathBase, settingsFile);
+            var dataFile = JsonSerializer.Serialize(settings);
+            if (!File.Exists(setingsFilePath))
+                File.CreateText(setingsFilePath).Close();
+            File.WriteAllText(setingsFilePath, dataFile);
+        }
     }
 }

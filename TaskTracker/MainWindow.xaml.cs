@@ -119,7 +119,7 @@ namespace TaskTracker
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            Settings view = new();
+            TrackerSettings view = new();
             view.WindowClosed += Settings_WindowClosed;
             view.Show();
         }
