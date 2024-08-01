@@ -116,6 +116,11 @@ namespace TaskTracker
             var test = e.RoutedEvent;
         }
 
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         //private static List<TaskItem> GenerateTestData()
         //{
         //    List<TaskItem> testData =
