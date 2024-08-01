@@ -7,6 +7,7 @@
         Incident,
         Request,
         Change,
-        C5Task
+        C5Task,
+        ChangeTask
     }
 }

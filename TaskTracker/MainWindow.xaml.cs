@@ -54,6 +54,7 @@ namespace TaskTracker
                         ServiceNowType.Request => "sc_request",
                         ServiceNowType.C5Task => "x_ofost_c5_task_table",
                         ServiceNowType.Change => "change_request",
+                        ServiceNowType.ChangeTask => "u_it_change_task",
                         _ => "sc_task"
                     };
                     var url = $"{SERVICENOWURL}/{type}.do?sysparm_query=number={taskItem.TaskId}";
