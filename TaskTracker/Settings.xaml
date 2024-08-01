@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskTracker"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
         Title="Settings" Height="300" Width="300">
     <Grid>
@@ -11,7 +12,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ListView x:Name="Categories" d:ItemsSource="{d:SampleData ItemCount=5}">
+        <ListView x:Name="CategoriesList" ItemsSource="{Binding Categories}" d:ItemsSource="{d:SampleData ItemCount=5}">
             
         </ListView>
         <StackPanel Grid.Row="1" Orientation="Horizontal">

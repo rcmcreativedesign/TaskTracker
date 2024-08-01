@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TaskTracker.Commands;
@@ -118,7 +119,14 @@ namespace TaskTracker
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
+            Settings view = new();
+            view.WindowClosed += Settings_WindowClosed;
+            view.Show();
+        }
 
+        private void Settings_WindowClosed(object sender, object e)
+        {
+            throw new NotImplementedException();
         }
 
         //private static List<TaskItem> GenerateTestData()
