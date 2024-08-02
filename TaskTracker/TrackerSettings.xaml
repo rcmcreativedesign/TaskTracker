@@ -15,9 +15,9 @@
         <ListView x:Name="CategoriesList" ItemsSource="{Binding Categories}" d:ItemsSource="{d:SampleData ItemCount=5}">
             
         </ListView>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
             <Button Content="Add" Height="30" MinWidth="50" Click="AddButton_Click"/>
-            <Button Content="OK" Margin="10,0,0,0" MinWidth="50"/>
+            <Button Content="OK" Margin="10,0,0,0" MinWidth="50" Click="OkButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

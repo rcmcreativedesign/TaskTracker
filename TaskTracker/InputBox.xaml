@@ -12,11 +12,11 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" Margin="5">
             <TextBlock Text="Enter a Category:" />
-            <TextBox Text="{Binding Text}" MinWidth="50" />
+            <TextBox Text="{Binding Text}" MinWidth="75" />
         </StackPanel>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
             <Button Content="OK" Click="OkButton_Click" IsDefault="True" />
             <Button Margin="10,0,0,0" Content="Cancel" Click="CancelButton_Click" IsCancel="True" />
         </StackPanel>
