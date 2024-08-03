@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using TaskTracker.Commands;
 using TaskTracker.Enums;
@@ -34,6 +35,9 @@ namespace TaskTracker
         public ICommand EditTaskCommand { get; set; }
 
         public ObservableCollection<TaskItem> TaskItems { get; set; } = [];
+        public ObservableCollection<string> Filters { get; set; } = ["All"];
+
+        public string SelectedFilter { get; set; } = "All";
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
@@ -59,7 +63,7 @@ namespace TaskTracker
                         _ => "sc_task"
                     };
                     var url = $"{SERVICENOWURL}/{type}.do?sysparm_query=number={taskItem.TaskId}";
-                    Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true});
+                    Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
                 }
             }
         }
@@ -68,7 +72,7 @@ namespace TaskTracker
         {
             if (taskId is string id)
             {
-                var taskItem = TaskItems.FirstOrDefault( x => x.TaskId == id);
+                var taskItem = TaskItems.FirstOrDefault(x => x.TaskId == id);
                 if (taskItem != null)
                 {
                     EditTask task = new();
@@ -127,7 +131,7 @@ namespace TaskTracker
 
         private void Settings_WindowClosed(object sender, object e)
         {
-            throw new NotImplementedException();
+            listBox.Items.Refresh();
         }
 
         //private static List<TaskItem> GenerateTestData()

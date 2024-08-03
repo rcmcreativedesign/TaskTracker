@@ -64,7 +64,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="2">
             <TextBlock Text="Category" MinWidth="75" />
-            <ComboBox ItemsSource="{helper:EnumCollection EnumType=enums:Category}" SelectedItem="{Binding TaskItem.Category, Mode=TwoWay}" MinWidth="150" />
+            <ComboBox ItemsSource="{Binding Categories, Mode=TwoWay}" SelectedItem="{Binding TaskItem.Category, Mode=TwoWay}" MinWidth="150" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="4" Margin="2">
             <TextBlock Text="Due Date" MinWidth="75" />

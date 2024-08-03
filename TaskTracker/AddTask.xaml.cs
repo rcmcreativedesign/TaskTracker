@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using TaskTracker.Commands;
@@ -12,12 +13,21 @@ namespace TaskTracker
         public AddTask()
         {
             InitializeComponent();
+            PopulateCategories();
             taskId.Focus();
         }
 
         public event EventHandler<TaskItem> WindowClosed;
 
         public TaskItem TaskItem { get; set; } = new();
+
+        public ObservableCollection<string> Categories { get; set; }
+
+        private void PopulateCategories()
+        {
+            var settings = DataProcessor.GetSettings();
+            Categories = new ObservableCollection<string>(settings.Categories);
+        }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {

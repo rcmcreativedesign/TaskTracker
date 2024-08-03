@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9B98165A-B960-47BF-BBAA-4FC0D04A6A8F}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		ToDo.txt = ToDo.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTracker.Tests", "TaskTracker.Tests\TaskTracker.Tests.csproj", "{89646836-778D-44D4-BDA4-0C2A060CF04F}"

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,11 +25,20 @@ namespace TaskTracker
         public EditTask()
         {
             InitializeComponent();
+            PopulateCategories();
         }
 
         public event EventHandler<TaskItem> WindowClosed;
 
         public TaskItem TaskItem { get; set; } = new();
+
+        public ObservableCollection<string> Categories { get; set; }
+
+        private void PopulateCategories()
+        {
+            var settings = DataProcessor.GetSettings();
+            Categories = new ObservableCollection<string>(settings.Categories);
+        }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {

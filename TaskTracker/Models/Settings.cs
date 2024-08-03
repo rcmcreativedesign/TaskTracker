@@ -4,6 +4,6 @@ namespace TaskTracker.Models
 {
     public class Settings
     {
-        public List<string> Categories { get; set; } = [];
+        public List<string> Categories { get; set; } = [ "None" ];
     }
 }
