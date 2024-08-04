@@ -148,7 +148,7 @@ namespace TaskTracker
 
             var allTasks = DataProcessor.GetAllTaskItems();
 
-            foreach (TaskItem item in allTasks.Where(t => filter == "All" || filter.Contains(t.Category ?? string.Empty))) // TODO:
+            foreach (TaskItem item in allTasks.Where(t => filter == "All" || (t.Category != null && filter.Contains(t.Category))))
             {
                 item.TaskCompleted += TaskCompletedHandler;
                 TaskItems.Add(item);
