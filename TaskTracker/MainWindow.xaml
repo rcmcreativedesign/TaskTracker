@@ -92,6 +92,15 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding DueDateDisplay}" TextWrapping="Wrap">
+                                        <TextBlock.Style>
+                                            <Style>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsOverDue}" Value="True">
+                                                        <Setter Property="TextBlock.Foreground" Value="Red"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
                                     </TextBlock>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>

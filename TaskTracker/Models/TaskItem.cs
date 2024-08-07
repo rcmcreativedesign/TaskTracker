@@ -20,6 +20,8 @@ namespace TaskTracker.Models
         private DateTime? dueDate;
         private DateTime? lastChecked;
 
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CompletedDate { get; set; }
         public bool IsCompleted
         {
             get => isCompleted;
@@ -28,7 +30,10 @@ namespace TaskTracker.Models
                 if (SetProperty(ref isCompleted, value))
                 {
                     if (isCompleted)
+                    {
+                        CompletedDate = DateTime.Now;
                         TaskCompleted?.Invoke(this, new EventArgs());
+                    }
                 }
             }
         }
@@ -50,11 +55,13 @@ namespace TaskTracker.Models
         public DateTime? DueDate { get => dueDate; set => SetProperty(ref dueDate, value); }
         public DateTime? LastChecked { get => lastChecked; set => SetProperty(ref lastChecked, value); }
         [JsonIgnore]
-        public bool IsValid { get => !string.IsNullOrEmpty(TaskId) && !string.IsNullOrEmpty(Description); }
+        public bool IsValid => !string.IsNullOrEmpty(TaskId) && !string.IsNullOrEmpty(Description); 
         [JsonIgnore]
         public string DueDateDisplay => DueDate?.ToString("MM/dd/yyyy", new CultureInfo("en-US")) ?? string.Empty;
         [JsonIgnore]
         public string LastCheckedDisplay => LastChecked?.ToString("MM/dd/yyy", new CultureInfo("en-US")) ?? string.Empty;
+        [JsonIgnore]
+        public bool IsOverDue => DueDate.HasValue && DueDate.Value < DateTime.Now;
 
         public event PropertyChangedEventHandler PropertyChanged;
 

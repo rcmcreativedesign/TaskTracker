@@ -9,7 +9,7 @@
         xmlns:helper="clr-namespace:TaskTracker.Helpers"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
-        Title="eDIT Item" Height="330" Width="300"
+        Title="eDIT Item" MinHeight="330" Width="300"
         WindowStartupLocation="CenterScreen"
         >
     <Grid Margin="10">
