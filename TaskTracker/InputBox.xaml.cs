@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace TaskTracker
 {
@@ -10,6 +11,7 @@ namespace TaskTracker
         public InputBox()
         {
             InitializeComponent();
+            textBox.Focus();
         }
 
         public string Text { get; set; }

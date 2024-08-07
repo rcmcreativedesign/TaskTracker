@@ -21,7 +21,7 @@ namespace TaskTracker.Models
         private DateTime? lastChecked;
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public DateTime CompletedDate { get; set; }
+        public DateTime? CompletedDate { get; set; }
         public bool IsCompleted
         {
             get => isCompleted;

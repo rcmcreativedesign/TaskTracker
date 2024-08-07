@@ -122,6 +122,7 @@ namespace TaskTracker
             if (sender is TaskItem task)
             {
                 task.TaskCompleted -= TaskCompletedHandler;
+                DataProcessor.SaveTaskItem(task);
                 _ = TaskItems.Remove(task);
             }
         }
