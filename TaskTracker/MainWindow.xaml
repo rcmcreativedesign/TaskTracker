@@ -15,8 +15,9 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="2" >
             <Button x:Name="AddButton" Content="Add" Click="AddButton_Click" Height="30" MinWidth="50" IsDefault="True"/>
-            <TabControl x:Name="FilterTab" TabStripPlacement="Top" Margin="10,0,0,0" />
-            <Button x:Name="SettingsButton" Click="SettingsButton_Click" Height="30" MinWidth="50" Content="Settings" Margin="10,0,0,0">
+            <TextBlock Text="Filter: " Margin="10,0,0,0" VerticalAlignment="Center" />
+            <ComboBox x:Name="Filter" ItemsSource="{Binding Filters, Mode=TwoWay}" SelectedItem="{Binding SelectedFilter, Mode=TwoWay}" MinWidth="150" VerticalContentAlignment="Center"/>
+            <Button x:Name="SettingsButton" Click="SettingsButton_Click" Height="30" MinWidth="50" Content="Settings" Margin="50,0,0,0">
                 
             </Button>
         </StackPanel>

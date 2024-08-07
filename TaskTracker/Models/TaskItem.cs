@@ -16,7 +16,7 @@ namespace TaskTracker.Models
         private ServiceNowType serviceNowType;
         private string requestor;
         private string assignedTo;
-        private Category category;
+        private string category;
         private DateTime? dueDate;
         private DateTime? lastChecked;
 
@@ -46,7 +46,7 @@ namespace TaskTracker.Models
         }
         public string Requestor { get => requestor; set => SetProperty(ref requestor, value); }
         public string AssignedTo { get => assignedTo; set => SetProperty(ref assignedTo, value); }
-        public Category Category { get => category; set => SetProperty(ref category, value); }
+        public string Category { get => category; set => SetProperty(ref category, value); }
         public DateTime? DueDate { get => dueDate; set => SetProperty(ref dueDate, value); }
         public DateTime? LastChecked { get => lastChecked; set => SetProperty(ref lastChecked, value); }
         [JsonIgnore]

@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using TaskTracker.Commands;
 using TaskTracker.Enums;
@@ -12,9 +16,10 @@ using TaskTracker.Models;
 
 namespace TaskTracker
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private const string SERVICENOWURL = "https://ostprod.servicenowservices.com";
+        private string selectedFilter = "All";
 
         public MainWindow()
         {
@@ -23,18 +28,27 @@ namespace TaskTracker
             TaskIdClickedCommand = new SimpleDelegateCommand(TaskId_Clicked);
             EditTaskCommand = new SimpleDelegateCommand(EditTask_Clicked);
 
-            foreach (TaskItem item in DataProcessor.GetAllTaskItems())
-            {
-                item.TaskCompleted += TaskCompletedHandler;
-                TaskItems.Add(item);
-            }
+            PopulateFilters();
+            RefreshList("All");
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand TaskIdClickedCommand { get; set; }
         public ICommand EditTaskCommand { get; set; }
 
         public ObservableCollection<TaskItem> TaskItems { get; set; } = [];
+        public ObservableCollection<string> Filters { get; set; } = ["All"];
 
+        public string SelectedFilter
+        {
+            get => selectedFilter;
+            set
+            {
+                if (SetProperty(ref selectedFilter, value))
+                    RefreshList(selectedFilter);
+            }
+        }
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             AddTask task = new();
@@ -59,7 +73,7 @@ namespace TaskTracker
                         _ => "sc_task"
                     };
                     var url = $"{SERVICENOWURL}/{type}.do?sysparm_query=number={taskItem.TaskId}";
-                    Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true});
+                    Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
                 }
             }
         }
@@ -68,7 +82,7 @@ namespace TaskTracker
         {
             if (taskId is string id)
             {
-                var taskItem = TaskItems.FirstOrDefault( x => x.TaskId == id);
+                var taskItem = TaskItems.FirstOrDefault(x => x.TaskId == id);
                 if (taskItem != null)
                 {
                     EditTask task = new();
@@ -108,16 +122,6 @@ namespace TaskTracker
             }
         }
 
-        private void TabControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            var test = e.AddedItems;
-        }
-
-        private void TabItem_Selected(object sender, RoutedEventArgs e)
-        {
-            var test = e.RoutedEvent;
-        }
-
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             TrackerSettings view = new();
@@ -127,7 +131,48 @@ namespace TaskTracker
 
         private void Settings_WindowClosed(object sender, object e)
         {
-            throw new NotImplementedException();
+            listBox.Items.Refresh();
+        }
+
+        private void PopulateFilters()
+        {
+            var filters = DataProcessor.GetSettings().Categories;
+            foreach (var filter in filters)
+                Filters.Add(filter);
+            RaisePropertyChanged(nameof(Filters));
+        }
+
+        private void RefreshList(string filter)
+        {
+            TaskItems.Clear();
+
+            var allTasks = DataProcessor.GetAllTaskItems();
+
+            foreach (TaskItem item in allTasks.Where(t => filter == "All" || (t.Category != null && filter.Contains(t.Category))))
+            {
+                item.TaskCompleted += TaskCompletedHandler;
+                TaskItems.Add(item);
+            }
+        }
+
+        protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(storage, value)) return false;
+
+            storage = value;
+            RaisePropertyChanged(propertyName);
+
+            return true;
+        }
+
+        protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs args)
+        {
+            PropertyChanged?.Invoke(this, args);
         }
 
         //private static List<TaskItem> GenerateTestData()
