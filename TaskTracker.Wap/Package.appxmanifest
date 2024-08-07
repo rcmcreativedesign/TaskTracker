@@ -9,7 +9,7 @@
   <Identity
     Name="ccf4ea9c-7caf-4277-a708-93e56b19d437"
     Publisher="CN=Robert McDonnell"
-    Version="1.0.0.0" />
+    Version="1.0.1.0" />
 
   <Properties>
     <DisplayName>TaskTracker</DisplayName>
