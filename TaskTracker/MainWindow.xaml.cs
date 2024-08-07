@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,6 +21,7 @@ namespace TaskTracker
     {
         private const string SERVICENOWURL = "https://ostprod.servicenowservices.com";
         private string selectedFilter = "All";
+        private readonly Dictionary<string, int> sortArray = [];
 
         public MainWindow()
         {
@@ -29,6 +31,7 @@ namespace TaskTracker
             EditTaskCommand = new SimpleDelegateCommand(EditTask_Clicked);
 
             PopulateFilters();
+            PopulateSortArray();
             RefreshList("All");
         }
 
@@ -49,6 +52,7 @@ namespace TaskTracker
                     RefreshList(selectedFilter);
             }
         }
+
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             AddTask task = new();
@@ -134,6 +138,27 @@ namespace TaskTracker
             listBox.Items.Refresh();
         }
 
+        private void Header_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is GridViewColumnHeader header)
+            {
+                var headerContent = header.Content.ToString();
+                int direction = ++sortArray[headerContent];
+                if (direction > 1)
+                    direction = -1;
+                sortArray[headerContent] = direction;
+                Expression<Func<TaskItem, object>> sort = headerContent switch
+                {
+                    "Task ID" => (x) => x.TaskId,
+                    "Desc" => (x) => x.Description,
+                    "Due" => (x) => x.DueDate,
+                    _ => (x) => null,
+                };
+
+                RefreshList(SelectedFilter, sort, direction);
+            }
+        }
+
         private void PopulateFilters()
         {
             var filters = DataProcessor.GetSettings().Categories;
@@ -142,11 +167,30 @@ namespace TaskTracker
             RaisePropertyChanged(nameof(Filters));
         }
 
-        private void RefreshList(string filter)
+        private void PopulateSortArray()
+        {
+            sortArray.Add("Task ID", -1);
+            sortArray.Add("Desc", -1);
+            sortArray.Add("Due", -1);
+        }
+
+        private void RefreshList(string selectedFilter)
+        {
+            RefreshList(selectedFilter, null, -1);
+        }
+
+        private void RefreshList(string filter, Expression<Func<TaskItem, object>> sort, int direction)
         {
             TaskItems.Clear();
 
-            var allTasks = DataProcessor.GetAllTaskItems();
+            var allTasks = DataProcessor.GetAllTaskItems().AsQueryable();
+            if (sort is not null)
+            {
+                if (direction == 0)
+                    allTasks = allTasks.OrderBy(sort);
+                else if (direction == 1)
+                    allTasks = allTasks.OrderByDescending(sort);
+            }
 
             foreach (TaskItem item in allTasks.Where(t => filter == "All" || (t.Category != null && filter.Contains(t.Category))))
             {

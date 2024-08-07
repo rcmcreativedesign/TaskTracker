@@ -8,6 +8,21 @@
             <Style.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5" />
+                    <!--<Setter Property="Background">
+                        <Setter.Value>
+                            <RadialGradientBrush GradientOrigin="0.496,1.052">
+                                <RadialGradientBrush.RelativeTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform CenterX="0.5" CenterY="0.5" 
+                                                        ScaleX="1.5" ScaleY="1.5"/>
+                                        <TranslateTransform X="0.02" Y="0.3"/>
+                                    </TransformGroup>
+                                </RadialGradientBrush.RelativeTransform>
+                                <GradientStop Offset="1" Color="#00000000"/>
+                                <GradientStop Offset="0.3" Color="#FFFFFFFF"/>
+                            </RadialGradientBrush>
+                        </Setter.Value>
+                    </Setter>-->
                 </Style>
             </Style.Resources>
         </Style>

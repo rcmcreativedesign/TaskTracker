@@ -32,7 +32,10 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Task ID" Width="90">
+                        <GridViewColumn Width="90">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="Task ID" Click="Header_Click" />
+                            </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding TaskId}">
@@ -52,7 +55,10 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Desc" Width="220">
+                        <GridViewColumn Width="220">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="Desc" Click="Header_Click" />
+                            </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Description}" TextWrapping="Wrap">
@@ -79,7 +85,10 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Due" Width="120">
+                        <GridViewColumn Width="120">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="Due" Click="Header_Click" />
+                            </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding DueDateDisplay}" TextWrapping="Wrap">
