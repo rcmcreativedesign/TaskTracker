@@ -19,8 +19,9 @@ namespace TaskTracker.Models
         private string category;
         private DateTime? dueDate;
         private DateTime? lastChecked;
+        private DateTime createdDate = DateTime.Now;
 
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get => createdDate; set => SetProperty(ref createdDate, value); }
         public DateTime? CompletedDate { get; set; }
         public bool IsCompleted
         {
@@ -89,6 +90,7 @@ namespace TaskTracker.Models
 
         internal void Update(TaskItem item)
         {
+            IsCompleted = item.IsCompleted;
             Category = item.Category;
             Description = item.Description;
             ServiceNowType = item.ServiceNowType;
@@ -96,6 +98,8 @@ namespace TaskTracker.Models
             LastChecked = item.LastChecked;
             Requestor = item.Requestor;
             AssignedTo = item.AssignedTo;
+            CreatedDate = item.CreatedDate;
+            CompletedDate = item.CompletedDate;
         }
     }
 }

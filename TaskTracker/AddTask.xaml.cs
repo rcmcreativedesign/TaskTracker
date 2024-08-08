@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using TaskTracker.Helpers;
@@ -38,9 +39,23 @@ namespace TaskTracker
             if (string.IsNullOrEmpty(TaskItem.TaskId) || string.IsNullOrEmpty(TaskItem.Description))
                 return;
 
-            DataProcessor.SaveTaskItem(TaskItem);
-            WindowClosed?.Invoke(this, TaskItem);
-            Close();
+            var existingRecord = DataProcessor.GetAllTaskItems().FirstOrDefault(t => t.TaskId == TaskItem.TaskId);
+            if (existingRecord is not null)
+            {
+                if (existingRecord.IsCompleted)
+                {
+                    if (MessageBox.Show("Task ID has been completed. Do you want to revive it?", "Revive Task ID", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        existingRecord.IsCompleted = false;
+                        SaveAndClose(existingRecord);
+                    }
+                }
+                else
+                    MessageBox.Show("Task ID already exists", "Task ID Exists", MessageBoxButton.OK);
+                return;
+            }
+
+            SaveAndClose(TaskItem);
         }
 
         private void CancelButton_Click(object obj, RoutedEventArgs e)
@@ -66,6 +81,13 @@ namespace TaskTracker
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs args)
         {
             PropertyChanged?.Invoke(this, args);
+        }
+
+        private void SaveAndClose(TaskItem itemToSave)
+        {
+            DataProcessor.SaveTaskItem(itemToSave);
+            WindowClosed?.Invoke(this, itemToSave);
+            Close();
         }
     }
 }

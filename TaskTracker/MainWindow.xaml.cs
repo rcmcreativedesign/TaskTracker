@@ -100,6 +100,8 @@ namespace TaskTracker
                     task.TaskItem.ServiceNowType = taskItem.ServiceNowType;
                     task.TaskItem.Requestor = taskItem.Requestor;
                     task.TaskItem.AssignedTo = taskItem.AssignedTo;
+                    task.TaskItem.CreatedDate = taskItem.CreatedDate;
+                    task.TaskItem.CompletedDate = taskItem.CompletedDate;
                 }
             }
         }
@@ -193,7 +195,7 @@ namespace TaskTracker
                     allTasks = allTasks.OrderByDescending(sort);
             }
 
-            foreach (TaskItem item in allTasks.Where(t => filter == "All" || (t.Category != null && filter.Contains(t.Category))))
+            foreach (TaskItem item in allTasks.Where(t => !t.IsCompleted).Where(t => filter == "All" || (t.Category != null && filter.Contains(t.Category))))
             {
                 item.TaskCompleted += TaskCompletedHandler;
                 TaskItems.Add(item);

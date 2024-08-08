@@ -1,1 +1,3 @@
 Update all affected taskitems if category removed
+On completion, pop up window with current date/time asking user to update or accept
+Update Add/Edit to allow adding sub-tasks. Have a listbox on the right to show Tasks
