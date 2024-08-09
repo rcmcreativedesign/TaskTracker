@@ -122,6 +122,10 @@ namespace TaskTracker
             if (sender is TaskItem task)
             {
                 task.TaskCompleted -= TaskCompletedHandler;
+                var inputBox = new InputBox("Enter completion date", task.CompletedDate.ToString());
+                inputBox.ShowDialog();
+                if (!string.IsNullOrEmpty(inputBox.Text) && DateTime.TryParse(inputBox.Text, out var date))
+                    task.CompletedDate = date;
                 DataProcessor.SaveTaskItem(task);
                 _ = TaskItems.Remove(task);
             }
