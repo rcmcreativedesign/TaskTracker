@@ -47,6 +47,7 @@ namespace TaskTracker
                     if (MessageBox.Show("Task ID has been completed. Do you want to revive it?", "Revive Task ID", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
                         existingRecord.IsCompleted = false;
+                        existingRecord.CompletedDate = null;
                         SaveAndClose(existingRecord);
                     }
                 }

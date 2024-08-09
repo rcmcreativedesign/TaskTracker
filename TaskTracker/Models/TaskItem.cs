@@ -30,7 +30,7 @@ namespace TaskTracker.Models
             {
                 if (SetProperty(ref isCompleted, value))
                 {
-                    if (isCompleted)
+                    if (isCompleted && CompletedDate is null)
                     {
                         CompletedDate = DateTime.Now;
                         TaskCompleted?.Invoke(this, new EventArgs());

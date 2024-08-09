@@ -69,7 +69,7 @@ namespace TaskTracker
                 {
                     var type = taskItem.ServiceNowType switch
                     {
-                        ServiceNowType.Incident => "sc_incident",
+                        ServiceNowType.Incident => "incident",
                         ServiceNowType.Request => "sc_request",
                         ServiceNowType.C5Task => "x_ofost_c5_task_table",
                         ServiceNowType.Change => "change_request",
