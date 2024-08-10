@@ -231,6 +231,6 @@
             <Button Content="Cancel" Click="CancelButton_Click" MinWidth="50" MaxHeight="30" IsCancel="True" Margin="5,0,0,0" />
         </StackPanel>
 
-        <Button Content="Add" Click="AddButton_Click" MinWidth="50" MaxHeight="30" />
+        <Button Grid.Column="1" Grid.Row="9" Content="Add" Click="AddButton_Click" MaxWidth="50" MaxHeight="30" />
     </Grid>
 </Window>
