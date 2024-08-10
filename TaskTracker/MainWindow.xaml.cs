@@ -91,7 +91,6 @@ namespace TaskTracker
                 {
                     EditTask task = new();
                     task.WindowClosed += EditTask_WindowClosed;
-                    task.Show();
                     task.TaskItem.TaskId = taskItem.TaskId;
                     task.TaskItem.Description = taskItem.Description;
                     task.TaskItem.Category = taskItem.Category;
@@ -102,6 +101,8 @@ namespace TaskTracker
                     task.TaskItem.AssignedTo = taskItem.AssignedTo;
                     task.TaskItem.CreatedDate = taskItem.CreatedDate;
                     task.TaskItem.CompletedDate = taskItem.CompletedDate;
+                    task.TaskItem.SubTasks = taskItem.SubTasks;
+                    task.Show();
                 }
             }
         }

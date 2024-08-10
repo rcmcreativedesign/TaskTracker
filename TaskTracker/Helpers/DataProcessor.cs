@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -22,6 +23,12 @@ namespace TaskTracker.Helpers
                 return [];
             var taskItems = JsonSerializer.Deserialize<List<TaskItem>>(dataFile);
             return taskItems ?? [];
+        }
+
+        public static List<TaskItem> GetAllTaskItems(string taskId)
+        {
+            var taskItem = GetAllTaskItems().FirstOrDefault(x => x.TaskId == taskId);
+            return [.. taskItem.SubTasks];
         }
 
         public static void SaveTaskItem(TaskItem item)

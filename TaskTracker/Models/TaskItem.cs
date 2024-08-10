@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -55,6 +56,9 @@ namespace TaskTracker.Models
         public string Category { get => category; set => SetProperty(ref category, value); }
         public DateTime? DueDate { get => dueDate; set => SetProperty(ref dueDate, value); }
         public DateTime? LastChecked { get => lastChecked; set => SetProperty(ref lastChecked, value); }
+        //public string ParentTaskId { get; set; }
+        public ObservableCollection<TaskItem> SubTasks { get; set; } = [];
+
         [JsonIgnore]
         public bool IsValid => !string.IsNullOrEmpty(TaskId) && !string.IsNullOrEmpty(Description); 
         [JsonIgnore]
