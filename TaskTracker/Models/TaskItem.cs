@@ -56,7 +56,7 @@ namespace TaskTracker.Models
         public string Category { get => category; set => SetProperty(ref category, value); }
         public DateTime? DueDate { get => dueDate; set => SetProperty(ref dueDate, value); }
         public DateTime? LastChecked { get => lastChecked; set => SetProperty(ref lastChecked, value); }
-        //public string ParentTaskId { get; set; }
+        public string ParentTaskId { get; set; }
         public ObservableCollection<TaskItem> SubTasks { get; set; } = [];
 
         [JsonIgnore]
@@ -104,6 +104,8 @@ namespace TaskTracker.Models
             AssignedTo = item.AssignedTo;
             CreatedDate = item.CreatedDate;
             CompletedDate = item.CompletedDate;
+
+            // Subitems
         }
     }
 }

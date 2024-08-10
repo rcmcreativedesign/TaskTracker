@@ -51,9 +51,21 @@ namespace TaskTracker
             Close();
         }
 
-        private void CancelButton_Click(object obj, RoutedEventArgs e)
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        public void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddTask addTask = new(TaskItem.TaskId);
+            addTask.WindowClosed += AddTask_WindowClosed;
+            addTask.Show();
+        }
+
+        private void AddTask_WindowClosed(object sender, TaskItem e)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void OnActivated(EventArgs e)
@@ -64,7 +76,8 @@ namespace TaskTracker
 
         protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
         {
-            if (EqualityComparer<T>.Default.Equals(storage, value)) return false;
+            if (EqualityComparer<T>.Default.Equals(storage, value)) 
+                return false;
 
             storage = value;
             RaisePropertyChanged(propertyName);

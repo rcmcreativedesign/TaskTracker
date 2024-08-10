@@ -28,7 +28,7 @@ namespace TaskTracker.Helpers
         public static List<TaskItem> GetAllTaskItems(string taskId)
         {
             var taskItem = GetAllTaskItems().FirstOrDefault(x => x.TaskId == taskId);
-            return [.. taskItem.SubTasks];
+            return [.. taskItem.SubTasks ?? []];
         }
 
         public static void SaveTaskItem(TaskItem item)

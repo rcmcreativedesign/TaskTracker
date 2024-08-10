@@ -9,7 +9,7 @@
         xmlns:helper="clr-namespace:TaskTracker.Helpers"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
-        Title="Edit Item" Height="350" Width="600"
+        Title="Edit Item" Height="350" Width="730"
         WindowStartupLocation="CenterScreen"
         >
     <Grid Margin="10">
@@ -131,7 +131,7 @@
             </TextBox>
         </StackPanel>
         
-        <GroupBox Header="Sub Tasks" Width="300" Grid.Column="1" Grid.RowSpan="9" Margin="20,0,0,0">
+        <GroupBox Header="Sub Tasks" Width="430" Grid.Column="1" Grid.RowSpan="9" Margin="20,0,0,0">
             <StackPanel Orientation="Vertical">
                 <ListView x:Name="subTasks"  ItemsSource="{Binding TaskItem.SubTasks}" SelectionMode="Single">
                     <ListView.View>
@@ -230,5 +230,7 @@
             <Button Content="Save" Click="SaveButton_Click" IsEnabled="{Binding TaskItem.IsValid, Mode=OneWay}" MinWidth="50" MaxHeight="30" IsDefault="True" />
             <Button Content="Cancel" Click="CancelButton_Click" MinWidth="50" MaxHeight="30" IsCancel="True" Margin="5,0,0,0" />
         </StackPanel>
+
+        <Button Content="Add" Click="AddButton_Click" MinWidth="50" MaxHeight="30" />
     </Grid>
 </Window>

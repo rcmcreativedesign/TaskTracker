@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using TaskTracker.Extensions;
 using TaskTracker.Helpers;
 using TaskTracker.Models;
 
@@ -12,11 +13,16 @@ namespace TaskTracker
 {
     public partial class AddTask : Window, INotifyPropertyChanged
     {
-        public AddTask()
+        private readonly string parentTaskId;
+
+        public AddTask() : this(string.Empty) { }
+
+        public AddTask(string parentTaskId)
         {
             InitializeComponent();
             PopulateCategories();
             taskId.Focus();
+            this.parentTaskId = parentTaskId;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -39,7 +45,7 @@ namespace TaskTracker
             if (string.IsNullOrEmpty(TaskItem.TaskId) || string.IsNullOrEmpty(TaskItem.Description))
                 return;
 
-            var existingRecord = DataProcessor.GetAllTaskItems().FirstOrDefault(t => t.TaskId == TaskItem.TaskId);
+            var existingRecord = DataProcessor.GetAllTaskItems().Flatten().FirstOrDefault(t => t.TaskId == TaskItem.TaskId);
             if (existingRecord is not null)
             {
                 if (existingRecord.IsCompleted)
@@ -56,6 +62,8 @@ namespace TaskTracker
                 return;
             }
 
+            if (parentTaskId != null) 
+                TaskItem.ParentTaskId = parentTaskId;
             SaveAndClose(TaskItem);
         }
 
@@ -86,7 +94,19 @@ namespace TaskTracker
 
         private void SaveAndClose(TaskItem itemToSave)
         {
-            DataProcessor.SaveTaskItem(itemToSave);
+            if (!string.IsNullOrEmpty(itemToSave.ParentTaskId))
+            {
+                var parent = DataProcessor.GetAllTaskItems().Where(t => t.TaskId == itemToSave.ParentTaskId).FirstOrDefault();
+                if (parent != null)
+                {
+                    parent.SubTasks.Add(itemToSave);
+                    DataProcessor.SaveTaskItem(parent);
+                }
+                else
+                    Close();
+            }
+            else
+                DataProcessor.SaveTaskItem(itemToSave);
             WindowClosed?.Invoke(this, itemToSave);
             Close();
         }
