@@ -9,9 +9,12 @@
         xmlns:helpers="clr-namespace:TaskTracker.Helpers"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
-        Title="Edit Item" Height="350" Width="730"
+        Title="Edit Item" Height="350" Width="{Binding WindowWidth}"
         WindowStartupLocation="CenterScreen"
         >
+    <helpers:BindableWindow.Resources>
+
+    </helpers:BindableWindow.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -130,8 +133,8 @@
                 </TextBox.Text>
             </TextBox>
         </StackPanel>
-        
-        <GroupBox Header="Sub Tasks" Width="430" Grid.Column="1" Grid.RowSpan="9" Margin="20,0,0,0">
+
+        <GroupBox Header="Sub Tasks" Width="430" Grid.Column="1" Grid.RowSpan="9" Margin="20,0,0,0" Visibility="{Binding IsParent}">
             <StackPanel Orientation="Vertical">
                 <ListView x:Name="subTasks"  ItemsSource="{Binding TaskItem.SubTasks}" SelectionMode="Single">
                     <ListView.View>
@@ -161,7 +164,7 @@
                                                     </Style>
                                                 </TextBlock.Style>
                                                 <TextBlock.InputBindings>
-                                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ElementName=listBox, Path=DataContext.TaskIdClickedCommand}" CommandParameter="{Binding TaskId}" />
+                                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ElementName=subTasks, Path=DataContext.TaskIdClickedCommand}" CommandParameter="{Binding TaskId}" />
                                                 </TextBlock.InputBindings>
                                             </TextBlock>
                                         </DataTemplate>
@@ -175,7 +178,7 @@
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Description}" TextWrapping="Wrap">
                                                 <TextBlock.InputBindings>
-                                                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ElementName=listBox, Path=DataContext.EditTaskCommand}" CommandParameter="{Binding TaskId}" />
+                                                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ElementName=subTasks, Path=DataContext.EditTaskCommand}" CommandParameter="{Binding TaskId}" />
                                                 </TextBlock.InputBindings>
                                                 <TextBlock.ToolTip>
                                                     <StackPanel Orientation="Vertical">
@@ -231,6 +234,6 @@
             <Button Content="Cancel" Click="CancelButton_Click" MinWidth="50" MaxHeight="30" IsCancel="True" Margin="5,0,0,0" />
         </StackPanel>
 
-        <Button Grid.Column="1" Grid.Row="9" Content="Add" Click="AddSubTaskButton_Click" MaxWidth="50" MaxHeight="30" />
+        <Button Grid.Column="1" Grid.Row="9" Content="Add" Click="AddSubTaskButton_Click" MaxWidth="50" MaxHeight="30" Visibility="{Binding IsParent}" />
     </Grid>
 </helpers:BindableWindow>

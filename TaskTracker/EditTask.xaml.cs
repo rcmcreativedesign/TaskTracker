@@ -3,11 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using TaskTracker.Commands;
+using TaskTracker.Enums;
 using TaskTracker.Helpers;
 using TaskTracker.Models;
 
@@ -18,6 +22,7 @@ namespace TaskTracker
     /// </summary>
     public partial class EditTask : BindableWindow, INotifyPropertyChanged
     {
+        private const string SERVICENOWURL = "https://ostprod.servicenowservices.com";
         private readonly Dictionary<string, int> sortArray = [];
         private TaskItem taskItem = new();
 
@@ -25,17 +30,27 @@ namespace TaskTracker
         {
             InitializeComponent();
 
+            TaskIdClickedCommand = new SimpleDelegateCommand(TaskId_Clicked);
+            EditTaskCommand = new SimpleDelegateCommand(EditTask_Clicked);
+
             PopulateCategories();
             PopulateSortArray();
             TaskItem = taskItem;
+            RaisePropertyChanged(nameof(IsParent));
+            RaisePropertyChanged(nameof(WindowWidth));
             RefreshList();
         }
 
         public event EventHandler<TaskItem> WindowClosed;
 
+        public ICommand TaskIdClickedCommand { get; set; }
+        public ICommand EditTaskCommand { get; set; }
+
         public TaskItem TaskItem { get => taskItem; set => SetProperty(ref taskItem, value); }
         public ObservableCollection<string> Categories { get; set; }
         public bool SubTasksModified { get; set; } = false;
+        public Visibility IsParent => string.IsNullOrEmpty(TaskItem.ParentTaskId) ? Visibility.Visible : Visibility.Collapsed;
+        public int WindowWidth => string.IsNullOrEmpty(TaskItem.ParentTaskId) ? 730 : 330;
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
@@ -62,6 +77,49 @@ namespace TaskTracker
         private void AddSubTask_WindowClosed(object sender, TaskItem e)
         {
             SubTasksModified = true;
+        }
+
+        private void EditTask_Clicked(object taskId)
+        {
+            if (taskId is string id)
+            {
+                var taskItem = TaskItem.SubTasks.FirstOrDefault(x => x.TaskId == id);
+                if (taskItem != null)
+                {
+                    EditTask task = new(taskItem);
+                    task.WindowClosed += EditTask_WindowClosed;
+                    task.Show();
+                }
+            }
+        }
+
+        private void EditTask_WindowClosed(object sender, TaskItem updatedItem)
+        {
+            var taskItem = TaskItem.SubTasks.First(x => x.TaskId == updatedItem.TaskId);
+            taskItem.Update(updatedItem);
+            RaisePropertyChanged(nameof(TaskItem.SubTasks));
+        }
+
+        private void TaskId_Clicked(object taskId)
+        {
+            if (taskId is string id)
+            {
+                var taskItem = TaskItem.SubTasks.FirstOrDefault(x => x.TaskId == id);
+                if (taskItem != null && taskItem.ServiceNowType != ServiceNowType.None)
+                {
+                    var type = taskItem.ServiceNowType switch
+                    {
+                        ServiceNowType.Incident => "incident",
+                        ServiceNowType.Request => "sc_request",
+                        ServiceNowType.C5Task => "x_ofost_c5_task_table",
+                        ServiceNowType.Change => "change_request",
+                        ServiceNowType.ChangeTask => "u_it_change_task",
+                        _ => "sc_task"
+                    };
+                    var url = $"{SERVICENOWURL}/{type}.do?sysparm_query=number={taskItem.TaskId}";
+                    Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
+                }
+            }
         }
 
         private void TaskCompletedHandler(object sender, EventArgs args)

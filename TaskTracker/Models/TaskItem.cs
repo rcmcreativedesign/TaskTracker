@@ -39,7 +39,15 @@ namespace TaskTracker.Models
                 }
             }
         }
-        public string TaskId { get => taskId; set { _ = SetProperty(ref taskId, value); RaisePropertyChanged(nameof(IsValid)); } }
+        public string TaskId
+        {
+            get => taskId;
+            set
+            {
+                _ = SetProperty(ref taskId, value);
+                RaisePropertyChanged(nameof(IsValid));
+            }
+        }
         public ServiceNowType ServiceNowType { get => serviceNowType; set => SetProperty(ref serviceNowType, value); }
         public bool IsServiceNow => ServiceNowType != ServiceNowType.None;
         public string Description
@@ -47,25 +55,28 @@ namespace TaskTracker.Models
             get => description;
             set
             {
-                _ = SetProperty(ref description, value); 
+                _ = SetProperty(ref description, value);
                 RaisePropertyChanged(nameof(IsValid));
             }
         }
         public string Requestor { get => requestor; set => SetProperty(ref requestor, value); }
         public string AssignedTo { get => assignedTo; set => SetProperty(ref assignedTo, value); }
         public string Category { get => category; set => SetProperty(ref category, value); }
-        public DateTime? DueDate { get => dueDate;
-            set {
-                if (value.HasValue) {
-                    var test = 1;
-                }
-                SetProperty(ref dueDate, value); } }
+        public DateTime? DueDate
+        {
+            get => dueDate;
+            set
+            {
+                _ = SetProperty(ref dueDate, value);
+                RaisePropertyChanged(nameof(IsValid));
+            }
+        }
         public DateTime? LastChecked { get => lastChecked; set => SetProperty(ref lastChecked, value); }
         public string ParentTaskId { get; set; }
         public ObservableCollection<TaskItem> SubTasks { get; set; } = [];
 
         [JsonIgnore]
-        public bool IsValid => !string.IsNullOrEmpty(TaskId) && !string.IsNullOrEmpty(Description); 
+        public bool IsValid => !string.IsNullOrEmpty(TaskId) && !string.IsNullOrEmpty(Description);
         [JsonIgnore]
         public string DueDateDisplay => DueDate?.ToString("MM/dd/yyyy", new CultureInfo("en-US")) ?? string.Empty;
         [JsonIgnore]

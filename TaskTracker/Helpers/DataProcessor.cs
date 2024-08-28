@@ -27,8 +27,21 @@ namespace TaskTracker.Helpers
 
         public static List<TaskItem> GetAllTaskItems(string taskId)
         {
-            var taskItem = GetAllTaskItems().FirstOrDefault(x => x.TaskId == taskId);
-            return [.. taskItem.SubTasks ?? []];
+            // taskId is passed, so we need to get all SubTasks.
+            // However, if this is a subtask, we need to get all Sub-SubTasks
+            var allTaskItems = GetAllTaskItems();
+
+            if (allTaskItems.Any(x => x.TaskId == taskId))
+                return [.. allTaskItems.FirstOrDefault(x => x.TaskId == taskId).SubTasks];
+
+            foreach (TaskItem taskItem in allTaskItems)
+            {
+                var item = taskItem.SubTasks.FirstOrDefault(x => x.TaskId == taskId);
+                if (item != null)
+                    return [.. item.SubTasks ?? []];
+            }
+
+            return [];
         }
 
         public static void SaveTaskItem(TaskItem item)
