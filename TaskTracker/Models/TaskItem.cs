@@ -54,7 +54,12 @@ namespace TaskTracker.Models
         public string Requestor { get => requestor; set => SetProperty(ref requestor, value); }
         public string AssignedTo { get => assignedTo; set => SetProperty(ref assignedTo, value); }
         public string Category { get => category; set => SetProperty(ref category, value); }
-        public DateTime? DueDate { get => dueDate; set => SetProperty(ref dueDate, value); }
+        public DateTime? DueDate { get => dueDate;
+            set {
+                if (value.HasValue) {
+                    var test = 1;
+                }
+                SetProperty(ref dueDate, value); } }
         public DateTime? LastChecked { get => lastChecked; set => SetProperty(ref lastChecked, value); }
         public string ParentTaskId { get; set; }
         public ObservableCollection<TaskItem> SubTasks { get; set; } = [];

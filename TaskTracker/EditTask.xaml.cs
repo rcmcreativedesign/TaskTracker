@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,31 +16,26 @@ namespace TaskTracker
     /// <summary>
     /// Interaction logic for EditTask.xaml
     /// </summary>
-    public partial class EditTask : Window, INotifyPropertyChanged
+    public partial class EditTask : BindableWindow, INotifyPropertyChanged
     {
         private readonly Dictionary<string, int> sortArray = [];
+        private TaskItem taskItem = new();
 
-        public EditTask()
+        public EditTask(TaskItem taskItem)
         {
             InitializeComponent();
+
             PopulateCategories();
             PopulateSortArray();
+            TaskItem = taskItem;
+            RefreshList();
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public event EventHandler<TaskItem> WindowClosed;
 
-        public TaskItem TaskItem { get; set; } = new();
-
+        public TaskItem TaskItem { get => taskItem; set => SetProperty(ref taskItem, value); }
         public ObservableCollection<string> Categories { get; set; }
-
-        private void PopulateCategories()
-        {
-            var settings = DataProcessor.GetSettings();
-            Categories = new ObservableCollection<string>(settings.Categories);
-            RaisePropertyChanged(nameof(Categories));
-        }
+        public bool SubTasksModified { get; set; } = false;
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
@@ -56,43 +52,16 @@ namespace TaskTracker
             Close();
         }
 
-        public void AddButton_Click(object sender, RoutedEventArgs e)
+        public void AddSubTaskButton_Click(object sender, RoutedEventArgs e)
         {
             AddTask addTask = new(TaskItem.TaskId);
-            addTask.WindowClosed += AddTask_WindowClosed;
+            addTask.WindowClosed += AddSubTask_WindowClosed;
             addTask.Show();
         }
 
-        private void AddTask_WindowClosed(object sender, TaskItem e)
+        private void AddSubTask_WindowClosed(object sender, TaskItem e)
         {
-            throw new NotImplementedException();
-        }
-
-        protected override void OnActivated(EventArgs e)
-        {
-            RefreshList();
-            base.OnActivated(e);
-        }
-
-        protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(storage, value)) 
-                return false;
-
-            storage = value;
-            RaisePropertyChanged(propertyName);
-
-            return true;
-        }
-
-        protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs args)
-        {
-            PropertyChanged?.Invoke(this, args);
+            SubTasksModified = true;
         }
 
         private void TaskCompletedHandler(object sender, EventArgs args)
@@ -128,6 +97,13 @@ namespace TaskTracker
 
                 RefreshList(sort, direction);
             }
+        }
+
+        private void PopulateCategories()
+        {
+            var settings = DataProcessor.GetSettings();
+            Categories = new ObservableCollection<string>(settings.Categories);
+            RaisePropertyChanged(nameof(Categories));
         }
 
         private void PopulateSortArray()

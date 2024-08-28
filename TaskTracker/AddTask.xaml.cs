@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using TaskTracker.Extensions;
 using TaskTracker.Helpers;
+using TaskTracker.Interfaces;
 using TaskTracker.Models;
 
 namespace TaskTracker
 {
-    public partial class AddTask : Window, INotifyPropertyChanged
+    public partial class AddTask : BindableWindow, IAddTask
     {
         private readonly string parentTaskId;
 
@@ -20,12 +18,11 @@ namespace TaskTracker
         public AddTask(string parentTaskId)
         {
             InitializeComponent();
+
             PopulateCategories();
             taskId.Focus();
             this.parentTaskId = parentTaskId;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public event EventHandler<TaskItem> WindowClosed;
 
@@ -70,26 +67,6 @@ namespace TaskTracker
         private void CancelButton_Click(object obj, RoutedEventArgs e)
         {
             Close();
-        }
-
-        protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(storage, value)) return false;
-
-            storage = value;
-            RaisePropertyChanged(propertyName);
-
-            return true;
-        }
-
-        protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs args)
-        {
-            PropertyChanged?.Invoke(this, args);
         }
 
         private void SaveAndClose(TaskItem itemToSave)

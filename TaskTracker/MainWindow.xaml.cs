@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,7 +14,7 @@ using TaskTracker.Models;
 
 namespace TaskTracker
 {
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : BindableWindow
     {
         private const string SERVICENOWURL = "https://ostprod.servicenowservices.com";
         private string selectedFilter = "All";
@@ -34,8 +31,6 @@ namespace TaskTracker
             PopulateSortArray();
             RefreshList("All");
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand TaskIdClickedCommand { get; set; }
         public ICommand EditTaskCommand { get; set; }
@@ -60,6 +55,45 @@ namespace TaskTracker
             task.Show();
         }
 
+        private void AddTask_WindowClosed(object sender, TaskItem addedItem)
+        {
+            addedItem.TaskCompleted += TaskCompletedHandler;
+            TaskItems.Add(addedItem);
+        }
+
+        private void EditTask_Clicked(object taskId)
+        {
+            if (taskId is string id)
+            {
+                var taskItem = TaskItems.FirstOrDefault(x => x.TaskId == id);
+                if (taskItem != null)
+                {
+                    EditTask task = new(taskItem);
+                    task.WindowClosed += EditTask_WindowClosed;
+                    task.Show();
+                }
+            }
+        }
+
+        private void EditTask_WindowClosed(object sender, TaskItem updatedItem)
+        {
+            var taskItem = TaskItems.First(x => x.TaskId == updatedItem.TaskId);
+            taskItem.Update(updatedItem);
+            listBox.Items.Refresh();
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            TrackerSettings view = new();
+            view.WindowClosed += Settings_WindowClosed;
+            view.Show();
+        }
+
+        private void Settings_WindowClosed(object sender, object e)
+        {
+            listBox.Items.Refresh();
+        }
+
         private void TaskId_Clicked(object taskId)
         {
             if (taskId is string id)
@@ -82,44 +116,6 @@ namespace TaskTracker
             }
         }
 
-        private void EditTask_Clicked(object taskId)
-        {
-            if (taskId is string id)
-            {
-                var taskItem = TaskItems.FirstOrDefault(x => x.TaskId == id);
-                if (taskItem != null)
-                {
-                    EditTask task = new();
-                    task.WindowClosed += EditTask_WindowClosed;
-                    task.TaskItem.TaskId = taskItem.TaskId;
-                    task.TaskItem.Description = taskItem.Description;
-                    task.TaskItem.Category = taskItem.Category;
-                    task.TaskItem.DueDate = taskItem.DueDate;
-                    task.TaskItem.LastChecked = taskItem.LastChecked;
-                    task.TaskItem.ServiceNowType = taskItem.ServiceNowType;
-                    task.TaskItem.Requestor = taskItem.Requestor;
-                    task.TaskItem.AssignedTo = taskItem.AssignedTo;
-                    task.TaskItem.CreatedDate = taskItem.CreatedDate;
-                    task.TaskItem.CompletedDate = taskItem.CompletedDate;
-                    task.TaskItem.SubTasks = taskItem.SubTasks;
-                    task.Show();
-                }
-            }
-        }
-
-        private void AddTask_WindowClosed(object sender, TaskItem addedItem)
-        {
-            addedItem.TaskCompleted += TaskCompletedHandler;
-            TaskItems.Add(addedItem);
-        }
-
-        private void EditTask_WindowClosed(object sender, TaskItem updatedItem)
-        {
-            var taskItem = TaskItems.First(x => x.TaskId == updatedItem.TaskId);
-            taskItem.Update(updatedItem);
-            listBox.Items.Refresh();
-        }
-
         private void TaskCompletedHandler(object sender, EventArgs args)
         {
             if (sender is TaskItem task)
@@ -132,18 +128,6 @@ namespace TaskTracker
                 DataProcessor.SaveTaskItem(task);
                 _ = TaskItems.Remove(task);
             }
-        }
-
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            TrackerSettings view = new();
-            view.WindowClosed += Settings_WindowClosed;
-            view.Show();
-        }
-
-        private void Settings_WindowClosed(object sender, object e)
-        {
-            listBox.Items.Refresh();
         }
 
         private void Header_Click(object sender, RoutedEventArgs e)
@@ -205,26 +189,6 @@ namespace TaskTracker
                 item.TaskCompleted += TaskCompletedHandler;
                 TaskItems.Add(item);
             }
-        }
-
-        protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(storage, value)) return false;
-
-            storage = value;
-            RaisePropertyChanged(propertyName);
-
-            return true;
-        }
-
-        protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs args)
-        {
-            PropertyChanged?.Invoke(this, args);
         }
 
         //private static List<TaskItem> GenerateTestData()
